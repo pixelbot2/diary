@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta Tags -->
+    <title>School Diary</title>
+    <link rel="icon" href="assets/nezuko.jpg" type="image/png" />
+    <meta name="title" content="School Diary " />
+    <meta
+      name="description"
+      content="A free online tool that generates personalized daily routine or diary pages, complete with homework, teacher details, and daily tasks..."
+    />
+    <meta
+      name="keywords"
+      content="school diary, routine, lessons, teacher books, students notes."
+    />
+    <meta name="robots" content="index, follow" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="language" content="English" />
+    <meta name="author" content="nafiz" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://nafiseggs.github.io/diaryy/" />
+    <meta property="og:title" content="School Diary " />
+    <meta
+      property="og:description"
+      content="A free online tool that generates personalized daily routine or diary pages, complete with homework, teacher details, and daily tasks..."
+    />
+    <meta
+      property="og:image"
+      content="https://nafis.github.io/diaryy/assets/nafis-diary-thumbnail.png"
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://nafizx.github.io/diaryy/" />
+    <meta property="twitter:title" content="School Diary " />
+    <meta
+      property="twitter:description"
+      content="A free online tool that generates personalized daily routine or diary pages, complete with homework, teacher details, and daily tasks..."
+    />
+    <meta
+      property="twitter:image"
+      content="https://metatags.io/assets/nafis-diary-thumbnail.png"
+    />
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: url("bgg.jpg") no-repeat center center fixed;
+        background-size: cover;
+        font-family: "Poppins", sans-serif;
+        height: 110vh;
+        color: white;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: scroll;
+      }
+
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+      }
+
+      .menu-icon {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 2;
+      }
+
+      .menu-icon img {
+        width: 25px;
+      }
+
+      .dropdown {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 10px;
+        overflow: hidden;
+        z-index: 2;
+      }
+
+      .dropdown button {
+        display: block;
+        padding: 10px 20px;
+        background: none;
+        color: white;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        text-align: left;
+      }
+
+      .dropdown button:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .container {
+        position: relative;
+        z-index: 2;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 15px;
+        width: 350px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(8px);
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-weight: 600;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        background: rgb(0 0 0 / 67%);
+        color: white;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(45deg, #6a11cb, #2575fc);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.3s;
+      }
+
+      .submit-btn:hover {
+        background: linear-gradient(45deg, #2575fc, #6a11cb);
+      }
+
+      .snowflake {
+        position: fixed;
+        top: -10px;
+        color: white;
+        font-size: 1.2em;
+        pointer-events: none;
+        animation: fall 10s linear infinite;
+        z-index: 3;
+      }
+
+      @keyframes fall {
+        0% {
+          transform: translateY(-10px) rotate(0deg);
+          opacity: 0;
+        }
+
+        50% {
+          opacity: 1;
+        }
+
+        100% {
+          transform: translateY(110vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .audio-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 2;
+      }
+
+      .audio-toggle img {
+        width: 20px;
+      }
+
+      .loading {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2em;
+        color: white;
+        z-index: 1000;
+      }
+
+      .response-card {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(8px);
+        text-align: center;
+        z-index: 1000;
+        max-width: 90%;
+        max-height: 90%;
+        overflow: auto;
+      }
+
+      .response-card img {
+        max-width: 100%;
+        max-height: 80vh;
+        border-radius: 8px;
+      }
+
+      .download-icon {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+      }
+
+      .close-icon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+      }
+
+      /* signed off by nafiz */
+      .loader {
+        display: none;
+        height: 32px;
+        width: 140px;
+        border: 3px solid #fff;
+        border-radius: 20px;
+        box-sizing: border-box;
+        animation: balancing 2s linear infinite alternate;
+        position: fixed;
+        top: 50%;
+        left: 42%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+      }
+
+      .loader:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 52px;
+        height: 26px;
+        border-radius: 20px;
+        background: #ff3d00;
+        animation: ballbns 2s linear infinite alternate;
+      }
+
+      @keyframes ballbns {
+        0% {
+          left: 0;
+          transform: translateX(0%);
+        }
+
+        100% {
+          left: 100%;
+          transform: translateX(-100%);
+        }
+      }
+
+      @keyframes balancing {
+        0% {
+          transform: rotate(-25deg);
+        }
+
+        50% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(25deg);
+        }
+      }
+
+      .overlay-dark {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 999;
+      }
+
+      .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        text-align: center;
+        margin-top: auto;
+        padding: -500px;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+
+  <body>
+    <div class="overlay"></div>
+
+    
+
+    <div class="dropdown" id="dropdownMenu">
+      <button onclick="showSection('diary')">Diary</button>
+      <button onclick="showSection('downloader')">Downloader</button>
+    </div>
+
+    <div class="container" id="diarySection">
+      <h2>Diary Form</h2>
+      <form onsubmit="redirectToDiaryAPI(event)">
+        <div class="form-group">
+          <label for="class">Class:</label>
+          <select id="class" required>
+            <option value="">Select class</option>
+            <option value="STD.I (Orchid & Camellia)">
+              STD.I (Orchid & Camellia)
+            </option>
+            <option value="STD.II (Daffodil & Daisy)">
+              STD.II (Daffodil & Daisy)
+            </option>
+            <option value="STD.III (Magnolia & Gardenia)">STD.III (Magnolia & Gardenia)</option>
+            <option value="STD.IV (Lavender)">STD.IV (Lavender)</option>
+            <option value="STD.V (Azalea)">STD.V (Azalea)</option>
+            <option value="STD.VI (Iris)">STD.VI (Iris)</option>
+            <option value="STD.VII (Aster)">STD.VII (Aster)</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="subject">Subject:</label>
+          <select id="subject" required>
+            <option value="">Select subject</option>
+            <option value="Music">Music</option>
+            <option value="Bangla">Bangla</option>
+            <option value="Art & Craft">Art & Craft</option>
+            <option value="Value Education">Value Education</option>
+            <option value="English">English</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Science">Science</option>
+            <option value="Global English">Global English</option>
+            <option value="Physics">Physics</option>
+            <option value="BGST">BGST</option>
+            <option value="ICT">ICT</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Biology">Biology</option>
+            <option value="Primary English">Primary English</option>
+            <option value="Mathematics D">Mathematics D</option>
+            <option value="Mathematics Additional">Mathematics Additional</option>
+            <option value="Global Citizenship">Global Citizenship</option>
+        <option value="Global Perspective">Global Perspective</option>
+        <option value="Global Perspective & Global Citizenship">Global Perspective & Global Citizenship</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="classwork">Teacher:</label>
+          <input
+            type="text"
+            id="teacher"
+            placeholder="Enter Teacher name"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="classwork">Classwork:</label>
+          <textarea
+            id="classwork"
+            placeholder="Enter classwork"
+            required
+            rows="3"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="homework">Homework:</label>
+          <textarea
+            id="homework"
+            placeholder="Enter homework"
+            required
+            rows="3"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="remarks">Remarks:</label>
+          <input
+            type="text"
+            id="remarks"
+            placeholder="Enter remarks"
+            value="N/A"
+            required
+          />
+        </div>
+        <button type="submit" class="submit-btn">Submit</button>
+      </form>
+    </div>
+
+    <div class="response-card" id="responseCard">
+      <img id="responseImage" alt="Response Image" />
+      <img
+        src="data:image/jpeg;base64,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"
+        alt="Download"
+        class="download-icon"
+        id="downloadIcon"
+      />
+      <img
+        src="data:image/png;base64,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"
+        alt="Close"
+        class="close-icon"
+        id="closeIcon"
+      />
+    </div>
+
+    <div class="container" id="downloaderSection" style="display: none">
+      <h2>Downloader Section</h2>
+      <form onsubmit="redirectToDownloaderAPI(event)">
+        <div class="form-group">
+          <label for="videoUrl">Video URL:</label>
+          <input
+            type="url"
+            id="videoUrl"
+            placeholder="Enter YouTube video URL"
+            required
+          />
+        </div>
+        <button type="submit" class="submit-btn">Download Video</button>
+      </form>
+    </div>
+    
+
+    <script>
+      const audio = new Audio("assets/minefields1.mp3");
+      audio.loop = true;
+      let isPlaying = false;
+
+      function toggleDropdown() {
+        const dropdown = document.getElementById("dropdownMenu");
+        dropdown.style.display =
+          dropdown.style.display === "block" ? "none" : "block";
+      }
+
+      function showSection(section) {
+        document.getElementById("diarySection").style.display =
+          section === "diary" ? "block" : "none";
+        document.getElementById("downloaderSection").style.display =
+          section === "downloader" ? "block" : "none";
+        document.getElementById("dropdownMenu").style.display = "none";
+      }
+
+      function redirectToDiaryAPI(event) {
+        event.preventDefault();
+
+        // play music uwu
+        toggleAudio(false);
+
+        $("#loading").show();
+        $("#overlayDark").show();
+        $("#responseCard").hide();
+
+        /* direct canvas image making without api */
+        /* by urs truly nafis*/
+
+        const params = {
+          cls: $("#class").val(),
+          subject: $("#subject").val(),
+          cw: $("#classwork").val(),
+          hw: $("#homework").val(),
+          remark: $("#remarks").val(),
+          teacher: $("#teacher").val() || "Farhan SIr",
+          date: null,
+        };
+
+        generateImage(params).then(() => {
+          sendLogData(params);
+        });
+
+        /* api method, signed off by nafis */
+
+        /*     const url = new URL("https://diary-r2c1.onrender.com/test");
+      url.searchParams.append("class", $("#class").val());
+      url.searchParams.append("subject", $("#subject").val());
+      url.searchParams.append("cw", $("#classwork").val());
+      url.searchParams.append("hw", $("#homework").val());
+      url.searchParams.append("remarks", $("#remarks").val());
+
+      $("#loading").show();
+      $("#overlayDark").show();
+      $("#responseCard").hide();
+
+      $.ajax({
+        url: url.href,
+        method: "GET",
+        xhrFields: {
+          responseType: "blob",
+        },
+        success: function (data) {
+          const img = document.getElementById("responseImage");
+          img.src = URL.createObjectURL(data);
+          $("#responseCard").show();
+          $("#loading").hide();
+          $("#overlayDark").hide();
+        },
+        error: function () {
+          $("#loading").hide();
+          $("#overlayDark").hide();
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Error fetching the image",
+          });
+        },
+      }); */
+      }
+
+      $("#downloadIcon").click(function () {
+        const img = document.getElementById("responseImage");
+        const link = document.createElement("a");
+        link.href = img.src;
+        link.download = "response_image.png";
+        link.click();
+      });
+
+      $("#closeIcon").click(function () {
+        $("#responseCard").hide();
+        $("#overlayDark").hide();
+      });
+
+      async function redirectToDownloaderAPI(event) {
+        event.preventDefault();
+        const videoUrl = document.getElementById("videoUrl").value;
+        const apiUrl = `https://downloader-20o6.onrender.com/download?url=${encodeURIComponent(
+          videoUrl
+        )}`;
+
+        try {
+          const response = await fetch(apiUrl);
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          const apiLink = await response.text(); // Assuming the response is plain text (a link)
+          console.log(`API response: ${apiLink}`);
+          window.location.href = apiLink; // Opens the link
+        } catch (error) {
+          console.error("Error fetching API response:", error);
+          alert("Failed to fetch the API response. Please try again.");
+        }
+      }
+
+      function createSnowflake() {
+        const snowflake = document.createElement("div");
+        snowflake.className = "snowflake";
+        snowflake.textContent = "❄";
+        snowflake.style.left = `${Math.random() * 100}vw`;
+        snowflake.style.animationDuration = `${Math.random() * 5 + 5}s`;
+        snowflake.style.opacity = Math.random();
+
+        document.body.appendChild(snowflake);
+        setTimeout(() => snowflake.remove(), 10000);
+      }
+
+      setInterval(createSnowflake, 300);
+
+      function toggleAudio(isPlaying = false) {
+        const toggleButton = document.getElementById("audioToggle");
+        if (isPlaying) {
+          audio.pause();
+          
+        } else {
+          audio.play();
+          
+        }
+        isPlaying = !isPlaying;
+      }
+
+      /* raw js canvas, no api needed*/
+      /*by yours truly nafis */
+
+      async function generateImage(params) {
+        const { cls, subject, cw, hw, remark, teacher, date } = params;
+
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Load the background image
+        const bg = new Image();
+        bg.src = "bg-v2.jpg";
+        await new Promise((resolve) => (bg.onload = resolve));
+
+        canvas.width = bg.width;
+        canvas.height = bg.height;
+
+        // Draw background image
+        ctx.drawImage(bg, 0, 0);
+
+        // Set text styles
+        ctx.font = "63px Arial";
+        ctx.fillStyle = "#000000";
+        ctx.textAlign = "start";
+
+        // Function to wrap text
+        function wrapText(context, text, x, y, maxWidth, lineHeight) {
+          const lines = text.split("\n"); 
+          lines.forEach((line) => {
+            const words = line.split(" "); 
+            let currentLine = "";
+            for (let n = 0; n < words.length; n++) {
+              const testLine = currentLine + words[n] + " ";
+              const metrics = context.measureText(testLine);
+              const testWidth = metrics.width;
+              if (testWidth > maxWidth && n > 0) {
+                context.fillText(currentLine, x, y); 
+                currentLine = words[n] + " "; 
+                y += lineHeight; 
+              } else {
+                currentLine = testLine; 
+              }
+            }
+            context.fillText(currentLine, x, y); 
+            y += lineHeight; 
+          });
+        }
+
+        // Draw text elements
+        ctx.fillText(cls, 375, 762);
+        ctx.fillText(subject, 425, 892);
+        ctx.fillText(teacher || "Nabila Tabassum", 695, 1018);
+        wrapText(ctx, cw, 181, 1240, 2000, 70);
+        wrapText(ctx, hw, 181, 1668, 2000, 70);
+        wrapText(ctx, remark, 181, 2100, 2000, 70);
+
+        // Handle date
+        ctx.textAlign = "center";
+        let dateText;
+        if (date) {
+          dateText = `Date: ${date}`;
+        } else {
+          const currentDate = new Date();
+          const day = String(currentDate.getDate()).padStart(2, "0");
+          const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+          const year = currentDate.getFullYear();
+          const dayName = currentDate.toLocaleString("en-US", {
+            weekday: "long",
+          });
+          dateText = `Date: ${day}.${month}.${year} (${dayName})`;
+        }
+        ctx.fillText(dateText, bg.width - 810, 756);
+
+        // sh0ow the image canvas to image
+        const img = document.getElementById("responseImage");
+        img.src = canvas.toDataURL("image/png");
+        $("#responseCard").show();
+        $("#loading").hide();
+        $("#overlayDark").hide();
+      }
+
+      function sendLogData(logData) {
+        fetch("log.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(logData),
+        })
+          .then((response) => response.json())
+          .then((data) => console.log("Log data sent successfully:", data))
+          .catch((error) => console.error("Error sending log data:", error));
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  // Trigger SweetAlert2 on page load
+  window.onload = function () {
+    Swal.fire({
+      title: "Do you have homework?",
+      text: "Please let us know so we can guide you!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Great!",
+          text: "You are in the right place.",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+        });
+      } else {
+        Swal.fire({
+          title: "Redirecting...",
+          text: "Hold tight! We're taking you to the senior diary 2nd page.",
+          icon: "info",
+          timer: 3000,
+          showConfirmButton: false,
+          didClose: () => {
+            window.location.href = "https://blu.com.bd/thephgss ";
+          },
+        });
+      }
+    });
+  };
+</script>
+    <button id="audioToggle" class="audio-toggle" onclick="toggleAudio()">
+     
+    </button>
+    <img id="respon" style="display: none" alt="Response Image" />
+  </body>
+</html>
