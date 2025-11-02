@@ -435,6 +435,64 @@
         }
 
         setInterval(createSnowflake, 300);
+        // ... existing JavaScript code ...
+
+diaryForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    responseCard.style.display = "none";
+
+    const teacherName = document.getElementById("teacher").value || "Farhan Sir";
+    lastTeacher = teacherName;
+
+    const form_data = {
+        cls: document.getElementById("class").value,
+        subject: document.getElementById("subject").value,
+        cw: document.getElementById("classwork").value,
+        hw: document.getElementById("homework").value,
+        remark: document.getElementById("remarks").value,
+        teacher: teacherName,
+    };
+    
+    // --- NEW: Send message to Telegram ---
+    sendTelegramMessage(form_data);
+    // ------------------------------------
+
+    const params = {
+        ...form_data, // Use the same data
+        date: null,
+    };
+
+    generateImage(params); // Continue with image generation
+});
+
+// --- NEW FUNCTION: To send data to your server endpoint ---
+async function sendTelegramMessage(data) {
+    const messageText = `*Diary Update*\n\nClass: ${data.cls}\nSubject: ${data.subject}\nTeacher: ${data.teacher}\n\n*Classwork:*\n${data.cw}\n\n*Homework:*\n${data.hw || 'None'}\n\n*Remarks:*\n${data.remark}`;
+
+    // Replace 'your_telegram_endpoint.php' with the actual path to your server script
+    try {
+        const response = await fetch('send_telegram.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: messageText }),
+        });
+
+        if (!response.ok) {
+            console.error('Telegram API request failed on server:', response.statusText);
+            // Optionally, show an error to the user
+        } else {
+            console.log('Telegram message sent successfully!');
+            // Optionally, show a success message to the user
+        }
+    } catch (error) {
+        console.error('Error sending data to server:', error);
+    }
+}
+// ... existing JavaScript code ...
+        
     </script>
 </body>
 <!-- Built with care by Nafis for Nabula ❤️ -->
