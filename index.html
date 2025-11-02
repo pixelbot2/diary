@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <!-- Built with care by Nafis for Nabula ❤️ -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>School Diary</title>
@@ -42,6 +43,7 @@
             position: relative;
             z-index: 2;
             background: rgba(255, 255, 255, 0.1);
+            /* CHANGED: Increased top/bottom padding to make it taller */
             padding: 40px 25px;
             border-radius: 15px;
             width: 90%;
@@ -145,21 +147,21 @@
         }
 
         .create-another-icon {
-            position: absolute;
-            bottom: 63px;
-            right: 5px;
-            width: 35px;
-            height: 35px;
-            cursor: pointer;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 50%;
-            background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xNy42NSA2LjM1QzE2LjIgNC45IDE0LjIxIDQgMTIgNGMtNC40MiAwLTcuOTkgMy41OC03Ljk5IDhzMy41NyA4IDcuOTkgOGMzLjczIDAgNi44NC0yLjU1IDcuNzMtNmgtMi4wOGMtLjgyIDIuMzMtMy4wNCA0LTUuNjUgNC0zLjMxIDAtNi0yLjY5LTYtNnMyLjY5LTYgNi02YzEuNjYgMCAzLjE0LjY5IDQuMjIgMS43OEwxMyAxMWg3VjRsLTIuMzUgMi4zNXoiLz48L3N2Zz4=");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 22px;
-            transition: 0.3s;
-            z-index: 10;
-        }
+    position: absolute;
+    bottom: 63px;      
+    right: 5px;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xNy42NSA2LjM1QzE2LjIgNC45IDE0LjIxIDQgMTIgNGMtNC40MiAwLTcuOTkgMy41OC03Ljk5IDhzMy41NyA4IDcuOTkgOGMzLjczIDAgNi44NC0yLjU1IDcuNzMtNmgtMi4wOGMtLjgyIDIuMzMtMy4wNCA0LTUuNjUgNC0zLjMxIDAtNi0yLjY5LTYtNnMyLjY5LTYgNi02YzEuNjYgMCAzLjE0LjY5IDQuMjIgMS43OEwxMyAxMWg3VjRsLTIuMzUgMi4zNXoiLz48L3N2Zz4=");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 22px;
+    transition: 0.3s;
+    z-index: 10;
+}
 
         .create-another-icon:hover {
             background-color: rgba(0, 0, 0, 0.9);
@@ -215,7 +217,7 @@
                     </option>
                     <option value="STD.II (Daffodil & Daisy)">
                         STD.II (Daffodil & Daisy)
-                    </Coption>
+                    </option>
                     <option value="STD.III (Magnolia & Gardenia)">STD.III (Magnolia & Gardenia)</option>
                     <option value="STD.IV (Lavender)">STD.IV (Lavender)</option>
                     <option value="STD.V (Azalea)">STD.V (Azalea)</option>
@@ -285,35 +287,26 @@
         const closeIcon = document.getElementById("closeIcon");
         const downloadBtn = document.getElementById("downloadBtn");
 
-        let lastTeacher = "Farhan Sir";
+        let lastTeacher = "nafis Sir";
 
-        // THIS IS THE ONLY SUBMIT LISTENER YOU NEED
         diaryForm.addEventListener("submit", function (event) {
             event.preventDefault();
             
             responseCard.style.display = "none";
 
-            const teacherName = document.getElementById("teacher").value || "Farhan Sir";
+            const teacherName = document.getElementById("teacher").value || "nafis Sir";
             lastTeacher = teacherName; 
 
-            // Create this object once
-            const form_data = {
+            const params = {
                 cls: document.getElementById("class").value,
                 subject: document.getElementById("subject").value,
                 cw: document.getElementById("classwork").value,
                 hw: document.getElementById("homework").value,
                 remark: document.getElementById("remarks").value,
-                teacher: teacherName
-            };
-
-            // --- 1. Send message to Telegram ---
-            sendTelegramMessage(form_data);
-            
-            // --- 2. Generate the image ---
-            const params = {
-                ...form_data, // Use the same data
+                teacher: teacherName,
                 date: null,
             };
+
             generateImage(params);
         });
 
@@ -337,32 +330,6 @@
             
             document.getElementById("teacher").value = lastTeacher;
         });
-
-        // --- NEW FUNCTION: To send data to your server endpoint ---
-        async function sendTelegramMessage(data) {
-            // Format the message content
-            const messageText = `*Diary Update*\n\n*Class:* ${data.cls}\n*Subject:* ${data.subject}\n*Teacher:* ${data.teacher}\n\n*Classwork:*\n${data.cw}\n\n*Homework:*\n${data.hw || 'None'}\n\n*Remarks:*\n${data.remark}`;
-
-            // This must match the name of the PHP file
-            try {
-                const response = await fetch('send_telegram.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ message: messageText }),
-                });
-
-                if (!response.ok) {
-                    console.error('Telegram API request failed on server:', response.statusText);
-                } else {
-                    console.log('Telegram message sent successfully!');
-                }
-            } catch (error) {
-                console.error('Error sending data to server:', error);
-            }
-        }
-        // ---------------------------------------------------------
 
         async function generateImage(params) {
             const { cls, subject, cw, hw, remark, teacher, date } = params;
@@ -469,5 +436,6 @@
 
         setInterval(createSnowflake, 300);
     </script>
-    </body>
+</body>
+<!-- Built with care by Nafis for Nabula ❤️ -->
 </html>
