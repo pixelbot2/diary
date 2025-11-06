@@ -1,89 +1,577 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
+      <!-- Made with care ❤️ for Nabila -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>School Diary</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <title>School Diary (Winter Edition)</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
 
-<body>
-    <div class="overlay"></div>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        /* --- CHANGED: Using bgg.jpg as the background --- */
+        background-image: url("bgg.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        /* --- End of Change --- */
+
+        font-family: "Poppins", sans-serif;
+        min-height: 100vh;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow-x: hidden;
+        padding: 2rem 0; /* Adjusted padding to make space for copyright */
+        padding-bottom: 40px; /* Ensure space for the copyright text */
+      }
+
+      /* --- REMOVED: @keyframes coolGradient (no longer needed) --- */
+
+      #snow-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1; /* Sits behind the form/card (z-index 2) */
+        overflow: hidden;
+      }
+
+      .snowflake {
+        position: absolute;
+        top: -20px;
+        color: white;
+        pointer-events: none;
+        animation: fall linear;
+        opacity: 0;
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+      }
+
+      @keyframes fall {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.8;
+        }
+        90% {
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(110vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .container,
+      .result-card {
+        position: relative;
+        z-index: 2; /* Sits on top of snow (z-index 1) */
+        background: rgba(0, 0, 0, 0.3);
+        padding: 40px 25px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 450px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+      }
+
+      .hidden {
+        opacity: 0;
+        transform: scale(0.9);
+        position: absolute;
+        pointer-events: none;
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        font-weight: 600;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 300;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        font-family: "Poppins", sans-serif;
+        transition: box-shadow 0.3s ease;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        outline: none;
+        box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(45deg, #00c6ff, #0072ff);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        color: white;
+        font-family: "Poppins", sans-serif;
+        margin-top: 10px;
+        box-shadow: 0 4px 20px rgba(0, 198, 255, 0.4);
+      }
+
+      .submit-btn:hover {
+        background: linear-gradient(45deg, #0072ff, #00c6ff);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(0, 198, 255, 0.6);
+      }
+
+      .result-card {
+        text-align: center;
+      }
+
+      .result-card img {
+        max-width: 100%;
+        max-height: 70vh;
+        border-radius: 8px;
+        margin-bottom: 15px;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 10px;
+      }
+
+      /* --- REORDERED BUTTON STYLES --- */
+      .close-btn,
+      .download-btn {
+        flex: 1;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-family: "Poppins", sans-serif;
+        transition: all 0.3s ease;
+      }
+
+      .download-btn {
+        background: linear-gradient(45deg, #23d5ab, #23a6d5);
+        color: white;
+        box-shadow: 0 4px 20px rgba(35, 166, 213, 0.4);
+      }
+
+      .download-btn:hover {
+        background: linear-gradient(45deg, #23a6d5, #23d5ab);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(35, 166, 213, 0.6);
+      }
+
+      .close-btn {
+        background: rgba(0, 0, 0, 0.4);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .close-btn:hover {
+        background: rgba(0, 0, 0, 0.6);
+        transform: translateY(-2px);
+      }
+      /* --- END OF REORDERED BUTTON STYLES --- */
+
+      .loader-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+
+      .loader {
+        border: 8px solid rgba(255, 255, 255, 0.2);
+        border-top: 8px solid #00c6ff;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* ADDED: Copyright text styles */
+      .copyright {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: rgba(255, 255, 255, 0.6); /* Subtle white */
+        font-size: 0.8em;
+        z-index: 0; /* Below everything, even the snow effect */
+        pointer-events: none; /* Can't click on it */
+        font-weight: 300;
+        letter-spacing: 0.5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="snow-container"></div>
+
+    <div class="loader-overlay" id="loaderOverlay">
+      <div class="loader"></div>
+    </div>
+
     <div class="container" id="diarySection">
-        <h2>Diary Form</h2>
-        <form id="diaryForm">
-            <div class="form-group">
-                <label for="class">Class:</label>
-                <select id="class" required>
-                    <option value="">Select class</option>
-                    <option value="STD.I (Orchid & Camellia)">
-                        STD.I (Orchid & Camellia)
-                    </option>
-                    <option value="STD.II (Daffodil & Daisy)">
-                        STD.II (Daffodil & Daisy)
-                    </option>
-                    <option value="STD.III (Magnolia & Gardenia)">STD.III (Magnolia & Gardenia)</option>
-                    <option value="STD.IV (Lavender)">STD.IV (Lavender)</option>
-                    <option value="STD.V (Azalea)">STD.V (Azalea)</option>
-                    <option value="STD.VI (Iris)">STD.VI (Iris)</option>
-                    <option value="STD.VII (Aster)">STD.VII (Aster)</option>
-                </select>
-            </div>
+      <h2>Diary Form</h2>
+      <form id="diaryForm">
+        <div class="form-group">
+          <label for="class">Class:</label>
+          <select id="class" required>
+            <option value="">Select class</option>
+            <option value="STD.I (Orchid & Camellia)">
+              STD.I (Orchid & Camellia)
+            </option>
+            <option value="STD.II (Daffodil & Daisy)">
+              STD.II (Daffodil & Daisy)
+            </option>
+            <option value="STD.III (Magnolia & Gardenia)">
+              STD.III (Magnolia & Gardenia)
+            </option>
+            <option value="STD.IV (Lavender)">STD.IV (Lavender)</option>
+            <option value="STD.V (Azalea)">STD.V (Azalea)</option>
+            <option value="STD.VI (Iris)">STD.VI (Iris)</option>
+            <option value="STD.VII (Aster)">STD.VII (Aster)</option>
+          </select>
+        </div>
 
-            <div class="form-group">
-                <label for="subject">Subject:</label>
-                <select id="subject" required>
-                    <option value="">Select subject</option>
-                    <option value="Music">Music</option>
-                    <option value="Bangla">Bangla</option>
-                    <option value="Art & Craft">Art & Craft</option>
-                    <option value="Value Education">Value Education</option>
-                    <option value="English">English</option>
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Science">Science</option>
-                    <option value="Global English">Global English</option>
-                    <option value="Physics">Physics</option>
-                    <option value="BGST">BGST</option>
-                    <option value="ICT">ICT</option>
-                    <option value="Chemistry">Chemistry</option>
-                    <option value="Biology">Biology</option>
-                    <option value="Primary English">Primary English</option>
-                    <option value="Mathematics D">Mathematics D</option>
-                    <option value_a"Mathematics Additional">Mathematics Additional</option>
-                    <option value="Global Citizenship">Global Citizenship</option>
-                    <option value="Global Perspective">Global Perspective</option>
-                    <option value="Global Perspective & Global Citizenship">Global Perspective & Global Citizenship
-                    </option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="classwork">Teacher:</label>
-                <input type="text" id="teacher" placeholder="Enter Teacher name" required />
-            </div>
-            <div class="form-group">
-                <label for="classwork">Classwork:</label>
-                <textarea id="classwork" placeholder="Enter classwork" required rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="homework">Homework:</label>
-                <textarea id="homework" placeholder="Leave blank if none" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="remarks">Remarks:</label>
-                <input type="text" id="remarks" placeholder="Enter remarks" value="N/A" required />
-            </div>
-            <button type="submit" class="submit-btn">Submit</button>
-        </form>
+        <div class="form-group">
+          <label for="subject">Subject:</label>
+          <select id="subject" required>
+            <option value="">Select subject</option>
+            <option value="Music">Music</option>
+            <option value="Bangla">Bangla</option>
+            <option value="Art & Craft">Art & Craft</option>
+            <option value="Value Education">Value Education</option>
+            <option value="English">English</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Science">Science</option>
+            <option value="Global English">Global English</option>
+            <option value="Physics">Physics</option>
+            <option value="BGST">BGST</option>
+            <option value="ICT">ICT</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Biology">Biology</option>
+            <option value="Primary English">Primary English</option>
+            <option value="Mathematics D">Mathematics D</option>
+            <option value_a"Mathematics Additional">
+              Mathematics Additional
+            </option>
+            <option value="Global Citizenship">Global Citizenship</option>
+            <option value="Global Perspective">Global Perspective</option>
+            <option value="Global Perspective & Global Citizenship">
+              Global Perspective & Global Citizenship
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="classwork">Teacher:</label>
+          <input
+            type="text"
+            id="teacher"
+            placeholder="Enter Teacher name"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="classwork">Classwork:</label>
+          <textarea
+            id="classwork"
+            placeholder="Enter classwork"
+            required
+            rows="3"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="homework">Homework:</label>
+          <textarea
+            id="homework"
+            placeholder="Leave blank if none"
+            rows="3"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="remarks">Remarks:</label>
+          <input
+            type="text"
+            id="remarks"
+            placeholder="Enter remarks"
+            value="N/A"
+            required
+          />
+        </div>
+        <button type="submit" class="submit-btn">Generate Diary</button>
+      </form>
     </div>
 
-    <div class="response-card" id="responseCard">
-        <img id="responseImage" alt="Response Image" />
-        <div class="create-another-icon" id="createAnotherIcon"></div>
-        <div class="close-icon" id="closeIcon"></div>
+    <div class="result-card hidden" id="resultCard">
+      <img id="responseImage" alt="Generated Diary Image" />
+      <div class="button-group">
+        <button id="closeBtn" class="close-btn">Close</button>
         <button id="downloadBtn" class="download-btn">Download</button>
+        </div>
     </div>
 
-    <script src="script.js"></script>
-</body>
+    <div class="copyright" id="copyrightText"></div>
+
+    <script>
+      // --- ADDED: SNOWFLAKE LOGIC ---
+      const snowContainer = document.getElementById("snow-container");
+      const snowflakes = ["❄", "❅", "❆"];
+
+      function createSnowflake() {
+        const flake = document.createElement("div");
+        flake.className = "snowflake";
+        flake.textContent =
+          snowflakes[Math.floor(Math.random() * snowflakes.length)];
+
+        flake.style.left = `${Math.random() * 100}vw`;
+
+        const animDuration = Math.random() * 5 + 8; // 8-13 seconds
+        flake.style.animationDuration = `${animDuration}s`;
+
+        const size = Math.random() * 0.8 + 0.4; // 0.4em to 1.2em
+        flake.style.fontSize = `${size}em`;
+
+        // Random delay so they don't all start falling at the same time
+        const animDelay = Math.random() * 3; // 0-3 seconds
+        flake.style.animationDelay = `${animDelay}s`;
+
+        snowContainer.appendChild(flake);
+
+        // Remove the snowflake element after its animation (duration + delay) is over
+        setTimeout(() => flake.remove(), (animDuration + animDelay) * 1000);
+      }
+
+      // Start the snow
+      setInterval(createSnowflake, 500); // Create a new flake every 500ms
+      // --- END OF SNOWFLAKE LOGIC ---
+
+      // --- ADDED: COPYRIGHT LOGIC ---
+      const copyrightTextElement = document.getElementById("copyrightText");
+      const currentYear = new Date().getFullYear();
+      // To force 2025, uncomment the line below:
+      // const displayYear = 2025;
+      const displayYear = currentYear; // Use current year dynamically
+
+      copyrightTextElement.textContent = `© ${displayYear} Nabila - All Rights Reserved`;
+      // --- END OF COPYRIGHT LOGIC ---
+
+      // Form and Result Card
+      const diaryForm = document.getElementById("diaryForm");
+      const diarySection = document.getElementById("diarySection");
+      const resultCard = document.getElementById("resultCard");
+
+      // Image and Buttons
+      const responseImage = document.getElementById("responseImage");
+      // *** CHANGED: Renamed createAnotherBtn to closeBtn ***
+      const closeBtn = document.getElementById("closeBtn");
+      const downloadBtn = document.getElementById("downloadBtn");
+
+      // Loader
+      const loaderOverlay = document.getElementById("loaderOverlay");
+
+      let lastTeacher = "Nafis Sir";
+
+      diaryForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        // Show the loader
+        loaderOverlay.style.display = "flex";
+
+        const teacherName =
+          document.getElementById("teacher").value || "Nafis Sir";
+        lastTeacher = teacherName;
+
+        const params = {
+          cls: document.getElementById("class").value,
+          subject: document.getElementById("subject").value,
+          cw: document.getElementById("classwork").value,
+          hw: document.getElementById("homework").value,
+          remark: document.getElementById("remarks").value,
+          teacher: teacherName,
+          date: null,
+        };
+
+        setTimeout(() => {
+          generateImage(params);
+        }, 50);
+      });
+
+      downloadBtn.addEventListener("click", function () {
+        const link = document.createElement("a");
+        link.href = responseImage.src;
+        link.download = "diary_entry.png";
+        link.click();
+      });
+
+      // *** CHANGED: Event listener for closeBtn ***
+      closeBtn.addEventListener("click", function () {
+        resultCard.classList.add("hidden");
+        diarySection.classList.remove("hidden");
+        document.getElementById("classwork").value = "";
+        document.getElementById("homework").value = "";
+        document.getElementById("remarks").value = "N/A";
+        document.getElementById("teacher").value = lastTeacher;
+      });
+      // *** End of Change ***
+
+      async function generateImage(params) {
+        const { cls, subject, cw, hw, remark, teacher, date } = params;
+
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const bg = new Image();
+        bg.crossOrigin = "anonymous";
+
+        function wrapText(context, text, x, y, maxWidth, lineHeight) {
+          const lines = text.split("\n");
+          lines.forEach((line) => {
+            const words = line.split(" ");
+            let currentLine = "";
+            for (let n = 0; n < words.length; n++) {
+              const testLine = currentLine + words[n] + " ";
+              const metrics = context.measureText(testLine);
+              const testWidth = metrics.width;
+              if (testWidth > maxWidth && n > 0) {
+                context.fillText(currentLine, x, y);
+                currentLine = words[n] + " ";
+                y += lineHeight;
+              } else {
+                currentLine = testLine;
+              }
+            }
+            context.fillText(currentLine, x, y);
+            y += lineHeight;
+          });
+        }
+
+        let dateText;
+        if (date) {
+          dateText = `Date: ${date}`;
+        } else {
+          const currentDate = new Date();
+          const day = String(currentDate.getDate()).padStart(2, "0");
+          const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+          const year = currentDate.getFullYear();
+          const dayName = currentDate.toLocaleString("en-US", {
+            weekday: "long",
+          });
+          dateText = `Date: ${day}.${month}.${year} (${dayName})`;
+        }
+
+        try {
+          if (hw && hw.trim() !== "") {
+            bg.src = "bg-v2.jpg";
+            await new Promise((resolve, reject) => {
+              bg.onload = resolve;
+              bg.onerror = reject;
+            });
+
+            canvas.width = bg.width;
+            canvas.height = bg.height;
+            ctx.drawImage(bg, 0, 0);
+
+            ctx.font = "63px Arial";
+            ctx.fillStyle = "#000000";
+            ctx.textAlign = "start";
+
+            ctx.fillText(cls, 375, 762);
+            ctx.fillText(subject, 425, 892);
+            ctx.fillText(teacher || "Nabila Tabassum", 695, 1018);
+            wrapText(ctx, cw, 181, 1240, 2000, 70);
+            wrapText(ctx, hw, 181, 1668, 2000, 70);
+            wrapText(ctx, remark, 181, 2100, 2000, 70);
+
+            ctx.textAlign = "center";
+            ctx.fillText(dateText, bg.width - 800, 763);
+          } else {
+            bg.src = "bg.jpg";
+            await new Promise((resolve, reject) => {
+              bg.onload = resolve;
+              bg.onerror = reject;
+            });
+
+            canvas.width = bg.width;
+            canvas.height = bg.height;
+            ctx.drawImage(bg, 0, 0);
+
+            ctx.font = "63px Arial";
+            ctx.fillStyle = "#000000";
+            ctx.textAlign = "start";
+
+            ctx.fillText(cls, 372, 772);
+            ctx.fillText(subject, 422, 902);
+            ctx.fillText(teacher || "Nabila Tabassum", 692, 1029);
+            wrapText(ctx, cw, 179, 1227, 2000, 70);
+
+            ctx.textAlign = "center";
+            ctx.fillText(dateText, bg.width - 838, 775);
+          }
+
+          responseImage.src = canvas.toDataURL("image/png");
+
+          loaderOverlay.style.display = "none";
+          diarySection.classList.add("hidden");
+          resultCard.classList.remove("hidden");
+        } catch (error) {
+          console.error("Error loading background image:", error);
+          alert(
+            "Error: Could not load the background image. Make sure 'bg.jpg' and 'bg-v2.jpg' are in the same folder."
+          );
+          loaderOverlay.style.display = "none";
+        }
+      }
+    </script>
+  </body>
 </html>
